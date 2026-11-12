@@ -6,6 +6,7 @@ let volume24hDisplay = document.querySelector(".volume-24h");
 let btcDominanceDisplay = document.querySelector(".btc-dominance");
 let ethDominanceDisplay = document.querySelector(".eth-dominance");
 let cryptoTable = document.querySelector(".crypto-table");
+let searchInput = document.querySelector(".search-input");
 let loadingSpinner = document.querySelector("#loadingSpinner");
 let chartModal = document.querySelector("#chart-modal");
 let addHoldingModal = document.querySelector("#addHoldingModal");
