@@ -117,5 +117,7 @@ function renderCoinData(data) {
 
 }
 
-  
+searchInput.addEventListener("input" , () =>{
+
+})  
 
