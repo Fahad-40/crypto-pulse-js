@@ -69,8 +69,8 @@ async function getCoinsData() {
     coinData = await response.json();
     loadingSpinner.classList.add("hidden")
     loadingSpinner.classList.remove("flex")
-    renderCoinData(data)
-    console.log(data);
+    renderCoinData(coinData)
+    console.log(coinData);
 }
 
 getCoinsData()
@@ -123,9 +123,9 @@ searchInput.addEventListener("input", (e) => {
     let searchValue = e.target.value.toLowerCase();
 
     let result = coinData.filter(coin => {
-        coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue)
+       return coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue)
     })
-    console.log(e.target.value);
     renderCoinData(result)
+    console.log(e.target.value);
 })
 
