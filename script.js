@@ -10,8 +10,21 @@ let searchInput = document.querySelector(".search-input");
 let loadingSpinner = document.querySelector("#loadingSpinner");
 let chartModal = document.querySelector("#chart-modal");
 let addHoldingModal = document.querySelector("#addHoldingModal");
+let themeToggleLightIcon = document.querySelector("#theme-toggle-light-icon");
 
 let coinData;
+let screenMode = dark; 
+
+themeToggleLightIcon.addEventListener("click" , () => {
+
+    
+
+})
+
+setInterval(async () => {
+  await getCoinsData();
+  searchInputfunc();
+}, 20000);
 
 function showState(elementToDisplay) {
     loadingSpinner.classList.add("hidden");
@@ -119,13 +132,16 @@ function renderCoinData(data) {
 
 }
 
-searchInput.addEventListener("input", (e) => {
-    let searchValue = e.target.value.toLowerCase();
+searchInput.addEventListener("input", searchInputfunc);
+
+function searchInputfunc() {
+    let searchValue = searchInput.value.toLowerCase();
+
+    if (!coinData) return;
 
     let result = coinData.filter(coin => {
-       return coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue)
-    })
-    renderCoinData(result)
-    console.log(e.target.value);
-})
-
+        return coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue);
+    });
+    
+    renderCoinData(result);
+}
