@@ -7,19 +7,40 @@ let btcDominanceDisplay = document.querySelector(".btc-dominance");
 let ethDominanceDisplay = document.querySelector(".eth-dominance");
 let cryptoTable = document.querySelector(".crypto-table");
 let searchInput = document.querySelector(".search-input");
+let htmlTag = document.querySelector(".htmlTag");
 let loadingSpinner = document.querySelector("#loadingSpinner");
 let chartModal = document.querySelector("#chart-modal");
 let addHoldingModal = document.querySelector("#addHoldingModal");
 let themeToggleLightIcon = document.querySelector("#theme-toggle-light-icon");
 
 let coinData;
-let screenMode = dark; 
+let screenMode = localStorage.getItem("screenMode") || "dark"; 
 
-themeToggleLightIcon.addEventListener("click" , () => {
+function applyTheme(mode) {
+    if (mode === "dark") {
+        htmlTag.classList.remove("light");
+        htmlTag.classList.add("dark");
+    } else {
+        htmlTag.classList.remove("dark");
+        htmlTag.classList.add("light");
+    }
+}
+applyTheme(screenMode);
 
+function screenModeLS() {
+    localStorage.setItem("screenMode" , screenMode)
+}
+
+themeToggleLightIcon.addEventListener("click", () => {
+    if (screenMode === "dark") {
+        screenMode = "light";
+    } else {
+        screenMode = "dark";
+    }
     
-
-})
+    applyTheme(screenMode);
+    localStorage.setItem("screenMode", screenMode);
+});
 
 setInterval(async () => {
   await getCoinsData();
