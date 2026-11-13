@@ -24,11 +24,12 @@ let favouriteCoinArray = JSON.parse(localStorage.getItem("starredIcons")) || [];
 
 function applyTheme(mode) {
     if (mode === "dark") {
-        htmlTag.classList.remove("light");
-        htmlTag.classList.add("dark");
-    } else {
         htmlTag.classList.remove("dark");
         htmlTag.classList.add("light");
+      
+    } else {
+          htmlTag.classList.remove("light");
+        htmlTag.classList.add("dark");
     }
 }
 applyTheme(screenMode);
@@ -381,7 +382,7 @@ function searchInputfunc() {
         result = result.filter(coin => favouriteCoinArray.includes(coin.id));
     }
 
-    result = coinData.filter(coin => {
+    result = result.filter(coin => {
         return coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue);
     });
 
