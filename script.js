@@ -11,6 +11,8 @@ let loadingSpinner = document.querySelector("#loadingSpinner");
 let chartModal = document.querySelector("#chart-modal");
 let addHoldingModal = document.querySelector("#addHoldingModal");
 
+let coinData;
+
 function showState(elementToDisplay) {
     loadingSpinner.classList.add("hidden");
     chartModal.classList.add("hidden");
@@ -64,7 +66,7 @@ function renderGlobalMarketBarData(data) {
 
 async function getCoinsData() {
     const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1");
-    const data = await response.json();
+    coinData = await response.json();
     loadingSpinner.classList.add("hidden")
     loadingSpinner.classList.remove("flex")
     renderCoinData(data)
@@ -75,11 +77,11 @@ getCoinsData()
 
 function renderCoinData(data) {
     cryptoTable.innerHTML = "";
-  data.forEach(coin => {
-      const isPositive = coin.price_change_percentage_24h >= 0;
-    const changeColor = isPositive ? "text-[#10b981]" : "text-red-500";
-    const changeSign = isPositive ? "+" : "";
-    cryptoTable.innerHTML += `
+    data.forEach(coin => {
+        const isPositive = coin.price_change_percentage_24h >= 0;
+        const changeColor = isPositive ? "text-[#10b981]" : "text-red-500";
+        const changeSign = isPositive ? "+" : "";
+        cryptoTable.innerHTML += `
 
         <div class="grid grid-cols-1 sm:grid-cols-[40px_3fr_2fr_2fr_140px] gap-4 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors items-center">
             <div class="hidden sm:flex justify-center items-center gap-1">
@@ -113,11 +115,17 @@ function renderCoinData(data) {
             </div>
         </div>
     `;
-   });
+    });
 
 }
 
-searchInput.addEventListener("input" , () =>{
+searchInput.addEventListener("input", (e) => {
+    let searchValue = e.target.value.toLowerCase();
 
-})  
+    let result = coinData.filter(coin => {
+        coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue)
+    })
+    console.log(e.target.value);
+    renderCoinData(result)
+})
 
