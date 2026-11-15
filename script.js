@@ -551,6 +551,41 @@ function renderPortfolioSummary(mergedHoldings) {
 
 cryptoTable.addEventListener("click" , (e) =>{
     if (e.target.closest(".chart-btn")) {
-        
+          const btn = e.target.closest(".chart-btn");
+    if (!btn) return;
+
+    showCoinChart(btn.dataset.id);
     }
 })
+
+function showCoinChart(coinId) {
+
+let coin = coinData.find(c => c.id === coinId)
+if (!coin) return;
+
+   const prices = coin.sparkline_in_7d.price;
+    const labels = prices.map((_, index) => index);
+
+    if (coinChart) coinChart.destroy();
+
+        coinChart = new Chart(chartCanvas, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: coin.name + " (7 days)",
+                data: prices,
+                borderColor: "#10b981",
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.3
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { x: { display: false } }
+        }
+    });
+}
+
+
