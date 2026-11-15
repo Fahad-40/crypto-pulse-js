@@ -10,6 +10,7 @@ let searchInput = document.querySelector(".search-input");
 let htmlTag = document.querySelector(".htmlTag");
 let saveHoldingBtn = document.querySelector(".save-holding-btn");
 let addHoldingForm = document.querySelector(".addHoldingForm");
+let holdingItem = document.querySelector(".holding-item");
 let favouriteBtn = document.querySelector("#filter-favorites-btn");
 let filterHoldingsBtn = document.querySelector("#filter-holdings-btn");
 let AllBtn = document.querySelector("#filter-all-btn");
@@ -20,6 +21,8 @@ let themeToggleLightIcon = document.querySelector("#theme-toggle-light-icon");
 let addHoldingBtn = document.querySelector("#add-holding-btn");
 let holdingsList = document.querySelector("#holdings-list");
 let HoldingTableContainer = document.querySelector("#holdings-view-container");
+let balanceEl = document.querySelector(".portfolio-balance");
+let pnlEl = document.querySelector(".portfolio-pnl");
 
 let showOnlyFavourites;
 let coinData;
@@ -54,10 +57,10 @@ themeToggleLightIcon.addEventListener("click", () => {
     localStorage.setItem("screenMode", screenMode);
 });
 
-setInterval(async () => {
-  await getCoinsData();
-  searchInputfunc();
-}, 20000);
+// setInterval(async () => {
+//     await getCoinsData();
+//     searchInputfunc();
+// }, 20000);
 
 AllBtn.addEventListener("click", () => {
     showOnlyFavourites = false;
@@ -71,13 +74,13 @@ function showState(elementToDisplay) {
     HoldingTableContainer.classList.add("hidden");
 
     elementToDisplay.classList.remove("hidden");
-    
+
     if (elementToDisplay === loadingSpinner) {
         loadingSpinner.classList.add("flex");
     }
 }
 
-showState(loadingSpinner);
+// showState(loadingSpinner);
 
 const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -86,13 +89,13 @@ const formatCurrency = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 2
 });
 
-async function getGlobalMarketBarData() {
-    let response = await fetch("https://api.coingecko.com/api/v3/global");
-    let data = await response.json();
-    renderGlobalMarketBarData(data);
-    console.log(data);
-}
-getGlobalMarketBarData();
+// async function getGlobalMarketBarData() {
+//     let response = await fetch("https://api.coingecko.com/api/v3/global");
+//     let data = await response.json();
+//     renderGlobalMarketBarData(data);
+//     console.log(data);
+// }
+// getGlobalMarketBarData();
 
 function renderGlobalMarketBarData(data) {
     globalMarketBar.innerHTML = "";
@@ -113,19 +116,138 @@ function renderGlobalMarketBarData(data) {
             `;
 }
 
-async function getCoinsData() {
-    const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1");
-    coinData = await response.json();
-    loadingSpinner.classList.add("hidden")
-    loadingSpinner.classList.remove("flex")
-    showState(cryptoTable)
-    renderCoinData(coinData)
-    console.log(coinData);
-}
+// async function getCoinsData() {
+//     const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1");
+//     coinData = await response.json();
+//     loadingSpinner.classList.add("hidden")
+//     loadingSpinner.classList.remove("flex")
+//     showState(cryptoTable)
+//     renderCoinData(coinData)
+//     console.log(coinData);
+// }
 
-getCoinsData()
+// getCoinsData()
 
+coinData = [
+    {
+        "id": "bitcoin",
+        "symbol": "btc",
+        "name": "Bitcoin",
+        "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+        "current_price": 65821,
+        "market_cap": 1324506477152,
+        "market_cap_rank": 1,
+        "fully_diluted_valuation": 1324507926004,
+        "total_volume": 35592579997,
+        "high_24h": 69052,
+        "low_24h": 65064,
+        "price_change_24h": -3121.28298259989,
+        "price_change_percentage_24h": -4.52737,
+        "market_cap_change_24h": -62029902423.7822,
+        "market_cap_change_percentage_24h": -4.47373,
+        "circulating_supply": 20111887,
+        "total_supply": 20111909,
+        "max_supply": 21000000,
+        "ath": 126080,
+        "ath_change_percentage": -47.79402,
+        "ath_date": "2025-10-06T10:57:42.000Z",
+        "atl": 67.81,
+        "atl_change_percentage": 96968.59987,
+        "atl_date": "2013-07-05T16:00:00.000Z",
+        "roi": null,
+        "last_updated": "2026-11-14T17:49:52.000Z"
+    },
+    {
+        "id": "ethereum",
+        "symbol": "eth",
+        "name": "Ethereum",
+        "image": "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+        "current_price": 1846.45,
+        "market_cap": 225825126707,
+        "market_cap_rank": 2,
+        "fully_diluted_valuation": 225825126707,
+        "total_volume": 13355269115,
+        "high_24h": 1954.2,
+        "low_24h": 1813.6,
+        "price_change_24h": -95.3123266565308,
+        "price_change_percentage_24h": -4.90854,
+        "market_cap_change_24h": -11488780458.0226,
+        "market_cap_change_percentage_24h": -4.84117,
+        "circulating_supply": 122218624.400395,
+        "total_supply": 122218624.400395,
+        "max_supply": null,
+        "ath": 4946.05,
+        "ath_change_percentage": -62.66813,
+        "ath_date": "2025-08-24T11:21:03.000Z",
+        "atl": 0.432979,
+        "atl_change_percentage": 426353.18569,
+        "atl_date": "2015-10-19T16:00:00.000Z",
+        "roi": {
+            "times": 43.3090896288635,
+            "currency": "btc",
+            "percentage": 4330.90896288636
+        },
+        "last_updated": "2026-11-14T17:49:52.000Z"
+    },
+    {
+        "id": "tether",
+        "symbol": "usdt",
+        "name": "Tether",
+        "image": "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
+        "current_price": 0.999424,
+        "market_cap": 175298011125,
+        "market_cap_rank": 3,
+        "fully_diluted_valuation": 180761843004,
+        "total_volume": 53178418462,
+        "high_24h": 0.999449,
+        "low_24h": 0.99903,
+        "price_change_24h": 0.00012275,
+        "price_change_percentage_24h": 0.01228,
+        "market_cap_change_24h": -296353059.15213,
+        "market_cap_change_percentage_24h": -0.16877,
+        "circulating_supply": 175398004599.97,
+        "total_supply": 180864953156.806,
+        "max_supply": null,
+        "ath": 1.32,
+        "ath_change_percentage": -24.4632,
+        "ath_date": "2018-07-23T16:00:00.000Z",
+        "atl": 0.572521,
+        "atl_change_percentage": 74.56545,
+        "atl_date": "2015-03-01T16:00:00.000Z",
+        "roi": null,
+        "last_updated": "2026-11-14T17:49:52.000Z"
+    },
+    {
+        "id": "binancecoin",
+        "symbol": "bnb",
+        "name": "BNB",
+        "image": "https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970",
+        "current_price": 591.9,
+        "market_cap": 77891906144,
+        "market_cap_rank": 4,
+        "fully_diluted_valuation": 77891899031,
+        "total_volume": 1019566602,
+        "high_24h": 638.67,
+        "low_24h": 583.59,
+        "price_change_24h": -42.3915663460109,
+        "price_change_percentage_24h": -6.68326,
+        "market_cap_change_24h": -5524580670.88998,
+        "market_cap_change_percentage_24h": -6.62289,
+        "circulating_supply": 131510610.96,
+        "total_supply": 131510598.95,
+        "max_supply": 200000000,
+        "ath": 1369.99,
+        "ath_change_percentage": -56.79515,
+        "ath_date": "2025-10-13T00:41:24.000Z",
+        "atl": 0.0398177,
+        "atl_change_percentage": 1486432.08364,
+        "atl_date": "2017-10-18T16:00:00.000Z",
+        "roi": null,
+        "last_updated": "2026-11-14T17:49:52.000Z"
+    }
+]
 
+renderCoinData(coinData)
 
 function renderCoinData(data) {
     cryptoTable.innerHTML = "";
@@ -243,7 +365,7 @@ favouriteBtn.addEventListener("click", () => {
 
 // ADD HOLDING MODAL
 addHoldingBtn.addEventListener("click", (e) => {
-  addHoldingModal.classList.remove("hidden");
+    addHoldingModal.classList.remove("hidden");
     addHoldingModal.classList.add("flex");
 
 })
@@ -278,19 +400,19 @@ addHoldingForm.addEventListener("submit", (e) => {
         buyingPrice: Number(formData.get("buyPrice")),
     }
 
-const existing = holdingsArray.find(h => h.coin === holding.coin);
+    const existing = holdingsArray.find(h => h.coin === holding.coin);
 
-if (existing) {
-    const totalQuantity = existing.quantityOfCoin + holding.quantityOfCoin;
-    const totalCost = (existing.quantityOfCoin * existing.buyingPrice) + (holding.quantityOfCoin * holding.buyingPrice);
-    existing.buyingPrice = totalCost / totalQuantity;
-    existing.quantityOfCoin = totalQuantity;
-} else {
-    holdingsArray.push(holding);
-}
+    if (existing) {
+        const totalQuantity = existing.quantityOfCoin + holding.quantityOfCoin;
+        const totalCost = (existing.quantityOfCoin * existing.buyingPrice) + (holding.quantityOfCoin * holding.buyingPrice);
+        existing.buyingPrice = totalCost / totalQuantity;
+        existing.quantityOfCoin = totalQuantity;
+    } else {
+        holdingsArray.push(holding);
+    }
     holdingLS()
-     renderHoldings(getMergedHoldings())
-     showState(HoldingTableContainer);
+    renderHoldings(getMergedHoldings())
+    showState(HoldingTableContainer);
     addHoldingModal.classList.remove("flex")
     addHoldingModal.classList.add("hidden")
 })
@@ -304,13 +426,13 @@ filterHoldingsBtn.addEventListener("click", () => {
     renderHoldings(getMergedHoldings())
 })
 
- function getMergedHoldings() {
-        return holdingsArray.map(holding => {
-            const apiCoin = coinData.find(coin => coin.id === holding.coin || coin.symbol.toLowerCase() === holding.coin);
-            if (!apiCoin) return null;
-            return { ...apiCoin, ...holding }
-        }).filter(item => item !== null)
-    }
+function getMergedHoldings() {
+    return holdingsArray.map(holding => {
+        const apiCoin = coinData.find(coin => coin.id === holding.coin || coin.symbol.toLowerCase() === holding.coin);
+        if (!apiCoin) return null;
+        return { ...apiCoin, ...holding }
+    }).filter(item => item !== null)
+}
 
 
 function renderHoldings(mergedHoldings) {
@@ -338,7 +460,7 @@ function renderHoldings(mergedHoldings) {
                                 <div class="holding-coin-symbol text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">${item.symbol}</div>
                             </div>
                         </div>
-                        <button class="delete-holding-btn md:hidden p-1.5 text-gray-400 hover:text-[#f43f5e] hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors focus:outline-none" title="Remove Holding">
+                        <button data-coin=${item.id} class="delete-holding-btn md:hidden p-1.5 text-gray-400 hover:text-[#f43f5e] hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors focus:outline-none" title="Remove Holding">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -371,7 +493,7 @@ function renderHoldings(mergedHoldings) {
 
                     <!-- Desktop Delete Button -->
                     <div class="hidden md:flex justify-center">
-                        <button class="delete-holding-btn p-1.5 text-gray-400 hover:text-[#f43f5e] hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors focus:outline-none" title="Remove Holding">
+                        <button data-coin=${item.id} class="delete-holding-btn p-1.5 text-gray-400 hover:text-[#f43f5e] hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors focus:outline-none" title="Remove Holding">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -383,7 +505,20 @@ function renderHoldings(mergedHoldings) {
     });
 }
 
+holdingsList.addEventListener("click", (e) => {
+    const deleteBtn = e.target.closest(".delete-holding-btn");
 
+    if (deleteBtn) {
+        const coinName = deleteBtn.dataset.coin; // HTML ke data-coin attribute se match karein
+
+        // Sirf us item ko nikal dein jis ka 'coin' deleteBtn ke data-coin se match karta hai
+        holdingsArray = holdingsArray.filter(item => item.coin !== coinName);
+
+        holdingLS();
+        renderHoldings(getMergedHoldings());
+        console.log(holdingsArray)
+    }
+});
 
 
 
