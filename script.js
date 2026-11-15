@@ -23,9 +23,10 @@ let holdingsList = document.querySelector("#holdings-list");
 let HoldingTableContainer = document.querySelector("#holdings-view-container");
 let balanceEl = document.querySelector(".portfolio-balance");
 let pnlEl = document.querySelector(".portfolio-pnl");
-
 let showOnlyFavourites;
 let coinData;
+let coinChart = null;
+
 let holdingsArray = JSON.parse(localStorage.getItem("holdingLS")) || [];
 let screenMode = localStorage.getItem("screenMode") || "dark";
 
@@ -116,17 +117,18 @@ function renderGlobalMarketBarData(data) {
             `;
 }
 
-// async function getCoinsData() {
-//     const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1");
-//     coinData = await response.json();
-//     loadingSpinner.classList.add("hidden")
-//     loadingSpinner.classList.remove("flex")
-//     showState(cryptoTable)
-//     renderCoinData(coinData)
-//     console.log(coinData);
-// }
+async function getCoinsData() {
+    const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true");
+    coinData = await response.json();
+    loadingSpinner.classList.add("hidden")
+    loadingSpinner.classList.remove("flex")
+    showState(cryptoTable)
+    renderCoinData(coinData)
+    console.log(coinData);
+}
 
-// getCoinsData()
+getCoinsData()
+// renderPortfolioSummary(getMergedHoldings());
 
 coinData = [
     {
@@ -302,7 +304,7 @@ function renderCoinData(data) {
                         </div>
 
                         <!-- 7d Trend Button -->
-                        <div class="flex justify-between md:justify-end items-center pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 dark:border-white/5">
+                        <div data-id="${coin.id}" class="chart-btn flex justify-between md:justify-end items-center pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 dark:border-white/5">
                             <span class="md:hidden text-xs text-gray-500 dark:text-gray-400">7d Trend</span>
                             <button class="open-chart-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-xs font-medium text-gray-700 dark:text-gray-300 transition-colors shadow-sm backdrop-blur-sm focus:outline-none">
                                 <svg class="w-3.5 h-3.5 ${changeColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -412,6 +414,8 @@ addHoldingForm.addEventListener("submit", (e) => {
     }
     holdingLS()
     renderHoldings(getMergedHoldings())
+   renderPortfolioSummary(getMergedHoldings());
+   renderPortfolioSummary(getMergedHoldings());
     showState(HoldingTableContainer);
     addHoldingModal.classList.remove("flex")
     addHoldingModal.classList.add("hidden")
@@ -424,6 +428,7 @@ function holdingLS() {
 filterHoldingsBtn.addEventListener("click", () => {
     showState(HoldingTableContainer);
     renderHoldings(getMergedHoldings())
+    renderPortfolioSummary(getMergedHoldings());
 })
 
 function getMergedHoldings() {
@@ -516,10 +521,36 @@ holdingsList.addEventListener("click", (e) => {
 
         holdingLS();
         renderHoldings(getMergedHoldings());
+        renderPortfolioSummary(getMergedHoldings());
         console.log(holdingsArray)
     }
 });
 
 
+function renderPortfolioSummary(mergedHoldings) {
+    if (mergedHoldings.length === 0) {
+        balanceEl.textContent = "$0.00";
+        pnlEl.textContent = "$0.00 (0.00%)";
+        return;
+    }
 
+    let totalCurrent = mergedHoldings.reduce((sum, item) => sum + item.quantityOfCoin * item.current_price , 0);
 
+    let totalBuy = mergedHoldings.reduce((sum, item) => item.quantityOfCoin * item.buyingPrice , 0);
+
+    let totalProfit = totalCurrent - totalBuy;
+    let totalPercent = (totalProfit / totalBuy) * 100;
+
+    let sign = totalProfit >= 0 ? "+" : "-";
+
+    balanceEl.textContent = "$" + totalCurrent.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    pnlEl.textContent = `${sign}${Math.abs(totalPercent).toFixed(2)}%(${sign}$${Math.abs(totalProfit).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`
+    pnlEl.classList.toggle("text-[#10b981]", totalProfit >= 0);
+    pnlEl.classList.toggle("text-[#f43f5e]", totalProfit < 0);
+}
+
+cryptoTable.addEventListener("click" , (e) =>{
+    if (e.target.closest(".chart-btn")) {
+        
+    }
+})
