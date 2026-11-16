@@ -59,5 +59,5 @@ Open `index.html` in your browser, or use a local server such as VS Code Live Se
 
 ## Author
 
-**Fahad**, frontend developer
+**Fahad Muneer**, Frontend developer
 [LinkedIn](www.linkedin.com/in/fahad-muneer40) · [GitHub](https://github.com/Fahad-40)
