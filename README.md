@@ -2,7 +2,7 @@
 
 A responsive cryptocurrency dashboard built with vanilla JavaScript. Track live prices for the top 50 coins, manage a personal portfolio with real profit/loss, and view 7-day price trends, all without a framework or backend.
 
-**[Live Demo](YOUR_LIVE_LINK)**
+**[Live Demo](https://crypto-pulse-js.vercel.app/)**
 
 ## Features
 
